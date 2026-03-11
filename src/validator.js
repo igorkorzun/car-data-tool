@@ -1,6 +1,6 @@
 // data validator
 
-export function validate(car) {
+export function validateCar(car) {
     const requiredFields = [
         "slug",
         "brand",
@@ -16,7 +16,7 @@ export function validate(car) {
         "insurance",
         "price_day",
         "mileage_per_day",
-        "extra-km-price"
+        "extra_km_price"
     ];
 
     for (const field of requiredFields) {

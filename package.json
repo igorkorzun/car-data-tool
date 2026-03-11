@@ -3,5 +3,8 @@
   "dependencies": {
     "papaparse": "^5.5.3",
     "sharp": "^0.34.5"
+  },
+  "scripts": {
+    "process": "node src/index.js"
   }
 }
