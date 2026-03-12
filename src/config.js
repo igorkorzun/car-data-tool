@@ -14,6 +14,10 @@ export const CARS_PATH = "/var/www/data/cars"; // images
 export const TEST_JSON_PATH = path.resolve(__dirname, './cars.json'); // test
 export const TEST_CSV_PATH = path.resolve(__dirname, './cars.csv'); // test
 
+export const TEST_UPLOADS_PATH = path.resolve(__dirname, '../uploads');
+export const TEST_CARS_PATH = path.resolve(__dirname, '../data/cars');
+
+
 export const IMAGE_SIZES = {
     cover: 1600,
     gallery: 1200,
