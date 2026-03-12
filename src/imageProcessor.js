@@ -14,8 +14,10 @@ async function optimizeImage(inputPath, outputPath, width) {
 }
 
 async function processCarImages(slug) {
+    
     const uploadCarPath = path.join(TEST_UPLOADS_PATH, slug);
     const destCarPath = path.join(TEST_CARS_PATH, slug);
+
     if (!fs.existsSync(uploadCarPath)) {
         console.warn(`Upload folder for ${slug} does not exist.`);
         return;
@@ -23,34 +25,38 @@ async function processCarImages(slug) {
 
     if (!fs.existsSync(destCarPath)) fs.mkdirSync(destCarPath, { recursive: true });
 
-    const coverSrs = path.join(uploadCarPath, 'cover');
-    const coverDest = path.join(destCarPath, 'cover');
-    if (fs.existsSync(coverSrs)) {
-        fs.mkdirSync(coverDest, { recursive: true });
-        const coverFiles = fs.readdirSync(coverSrs);
-        for (const file of coverFiles) {
-            const inputFile = path.join(coverSrs, file);
-            const outputFile = path.join(coverDest, "main.webp");
-            await optimizeImage(inputFile, outputFile, IMAGE_SIZES.cover);
+    try {
+        const coverSrs = path.join(uploadCarPath, 'cover');
+        const coverDest = path.join(destCarPath, 'cover');
+        if (fs.existsSync(coverSrs)) {
+            fs.mkdirSync(coverDest, { recursive: true });
+            const coverFiles = fs.readdirSync(coverSrs);
+            for (const file of coverFiles) {
+                const inputFile = path.join(coverSrs, file);
+                const outputFile = path.join(coverDest, "main.webp");
+                await optimizeImage(inputFile, outputFile, IMAGE_SIZES.cover);
+            }
         }
-    }
 
-    const gallerySrc = path.join(uploadCarPath, "gallery");
-    const galleryDest = path.join(destCarPath, "gallery");
-    if (fs.existsSync(gallerySrc)) {
-        fs.mkdirSync(galleryDest, { recursive: true });
-        const galleryFiles = fs.readdirSync(gallerySrc);
-        let counter = 1;
-        for (const file of galleryFiles) {
-            const inputFile = path.join(gallerySrc, file);
-            const outputFile = path.join(galleryDest, `${counter}.webp`);
-            await optimizeImage(inputFile, outputFile, IMAGE_SIZES.gallery);
-            counter++;
+        const gallerySrc = path.join(uploadCarPath, "gallery");
+        const galleryDest = path.join(destCarPath, "gallery");
+        if (fs.existsSync(gallerySrc)) {
+            fs.mkdirSync(galleryDest, { recursive: true });
+            const galleryFiles = fs.readdirSync(gallerySrc);
+            let counter = 1;
+            for (const file of galleryFiles) {
+                const inputFile = path.join(gallerySrc, file);
+                const outputFile = path.join(galleryDest, `${counter}.webp`);
+                await optimizeImage(inputFile, outputFile, IMAGE_SIZES.gallery);
+                counter++;
+            }
         }
+
+        fs.rmSync(uploadCarPath, { recursive: true, force: true });
+        console.log(`Images for ${slug} processed & uploads removed.`);
+    } catch (err) {
+        console.error(`Error processing images for ${slug}: `, err.message)
     }
-
-    console.log(`Images for ${slug} processed.`);
-
 }
 
 export async function processAllImages() {
